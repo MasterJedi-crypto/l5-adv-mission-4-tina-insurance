@@ -5,19 +5,16 @@ export default function QuestionCard({ role, text }) {
   if (isFeedback) {
     return (
       <div className="flex items-start gap-3">
-        <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-blue-700/40 bg-blue-900/20">
-          <span className="text-sm font-bold text-blue-400">
-            F
-          </span>
+        <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f58220]">
+          <span className="text-sm font-extrabold text-white">T</span>
         </div>
 
         <div className="min-w-0 flex-1">
-          <p className="mb-2 font-mono text-[11px] font-semibold tracking-wide text-blue-400">
-            Interview Feedback
+          <p className="mb-2 text-xs font-bold uppercase tracking-wide text-[#082f4f]">
+            Tina’s recommendation
           </p>
-
-          <div className="max-w-[90%] rounded-2xl rounded-bl-none border border-blue-700/40 bg-blue-900/20 px-4 py-3">
-            <p className="whitespace-pre-wrap break-words text-[15px] leading-relaxed text-blue-200">
+          <div className="max-w-[92%] rounded-xl rounded-tl-sm border border-[#f2c49d] bg-[#fff7ef] px-4 py-4 shadow-sm">
+            <p className="whitespace-pre-wrap break-words text-[15px] leading-7 text-[#29465b]">
               {text}
             </p>
           </div>
@@ -30,21 +27,18 @@ export default function QuestionCard({ role, text }) {
     return (
       <div className="flex items-start justify-end gap-3">
         <div className="flex min-w-0 flex-1 flex-col items-end">
-          <p className="mb-2 font-mono text-[11px] font-semibold tracking-wide text-[#9898a8]">
+          <p className="mb-2 text-xs font-bold uppercase tracking-wide text-[#536675]">
             You
           </p>
-
-          <div className="max-w-[90%] rounded-2xl rounded-br-none border border-[#27272f] bg-[#16161a] px-4 py-3">
-            <p className="whitespace-pre-wrap break-words text-[15px] leading-relaxed text-[#e8e8f0]">
+          <div className="max-w-[92%] rounded-xl rounded-tr-sm bg-[#082f4f] px-4 py-3 shadow-sm">
+            <p className="whitespace-pre-wrap break-words text-[15px] leading-7 text-white">
               {text}
             </p>
           </div>
         </div>
 
-        <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#27272f] bg-[#1a1a20]">
-          <span className="font-mono text-xs font-semibold text-[#9898a8]">
-            U
-          </span>
+        <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#dfe7ec]">
+          <span className="text-xs font-extrabold text-[#536675]">YOU</span>
         </div>
       </div>
     );
@@ -52,19 +46,16 @@ export default function QuestionCard({ role, text }) {
 
   return (
     <div className="flex items-start gap-3">
-      <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#39ff6e44] bg-[#39ff6e0d]">
-        <span className="font-mono text-xs font-bold text-[#39ff6e]">
-          AI
-        </span>
+      <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#0073b9]">
+        <span className="text-sm font-extrabold text-white">T</span>
       </div>
 
       <div className="min-w-0 flex-1">
-        <p className="mb-2 font-mono text-[11px] font-semibold tracking-wide text-[#39ff6e]">
-          Interview Coach
+        <p className="mb-2 text-xs font-bold uppercase tracking-wide text-[#0073b9]">
+          Tina
         </p>
-
-        <div className="max-w-[90%] rounded-2xl rounded-bl-none border border-[#1e1e24] border-l-2 border-l-[#39ff6e] bg-[#111114] px-4 py-3">
-          <p className="whitespace-pre-wrap break-words text-[15px] leading-relaxed text-[#c8c8d4]">
+        <div className="max-w-[92%] rounded-xl rounded-tl-sm border border-[#cddce5] bg-white px-4 py-3 shadow-sm">
+          <p className="whitespace-pre-wrap break-words text-[15px] leading-7 text-[#29465b]">
             {text}
           </p>
         </div>
