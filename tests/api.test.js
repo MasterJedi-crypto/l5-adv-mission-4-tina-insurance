@@ -3,21 +3,22 @@ import { POST } from "@/app/api/interview/route";
 
 
 
-describe("Interview API", () => {
-  it("returns the first question when history is empty", async () => {
+describe("Tina insurance API", () => {
+  it("returns Tina’s opt-in question when history is empty", async () => {
     const response = await POST(
       new Request("http://localhost/api/interview", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          jobTitle: "Frontend Developer",
+          jobTitle: "Insurance consultation",
           history: [],
         }),
       })
     );
     const data = await response.json();
     expect(response.status).toBe(200);
-    expect(data.reply).toContain("Tell me about yourself");
+    expect(data.reply).toContain("I’m Tina");
+    expect(data.reply).toContain("May I ask you");
     expect(data.questionNumber).toBe(1);
     expect(data.isComplete).toBe(false);
   });
