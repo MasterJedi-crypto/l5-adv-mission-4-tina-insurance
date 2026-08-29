@@ -21,7 +21,7 @@ export default function InterviewPage() {
   const [messages, setMessages] = useState([
     {
       role: "interviewer",
-      text: "Tell me about yourself",
+      text: "I’m Tina. I help you choose the right insurance policy. May I ask you a few personal questions to make sure I recommend the best policy for you?",
     },
   ]);
 
@@ -135,37 +135,37 @@ export default function InterviewPage() {
 }
 
   return (
-    <main className="min-h-screen bg-[#0a0a0b] px-4 py-4 text-[#e8e8f0] sm:px-6 sm:py-8">
+    <main className="min-h-screen bg-[#f3f6f8] px-4 py-4 text-[#142536] sm:px-6 sm:py-8">
       <div className="mx-auto flex min-h-[calc(100vh-2rem)] max-w-4xl flex-col sm:min-h-[calc(100vh-4rem)]">
-        <header className="mb-5 flex items-center justify-between border-b border-[#1a1a20] pb-4">
+        <header className="mb-5 flex items-center justify-between border-b-4 border-[#f58220] bg-[#082f4f] px-4 py-4 shadow-sm sm:rounded-lg sm:px-5">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#39ff6e44] bg-[#39ff6e0d]">
-              <span className="font-mono text-sm font-bold text-[#39ff6e]">
-                AI
+            <div className="flex h-10 w-10 items-center justify-center rounded-md bg-[#f58220]">
+              <span className="text-sm font-extrabold text-white">
+                T
               </span>
             </div>
 
             <div>
-              <h1 className="text-base font-bold tracking-tight sm:text-lg">
-                Interview Coach
+              <h1 className="text-base font-extrabold tracking-tight text-white sm:text-lg">
+                Tina Insurance Assistant
               </h1>
 
-              <p className="font-mono text-[10px] uppercase tracking-wide text-[#6b6b7a]">
-                AI-powered practice
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-[#b9d7e8]">
+                Turners Car Insurance
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="hidden items-center gap-2 rounded-full border border-[#1e1e24] bg-[#111114] px-3 py-2 sm:flex">
-              <div className="h-1 w-20 overflow-hidden rounded-full bg-[#27272f]">
+            <div className="hidden items-center gap-2 rounded-full bg-white/10 px-3 py-2 sm:flex">
+              <div className="h-1 w-20 overflow-hidden rounded-full bg-white/20">
                 <div
-                  className="h-full rounded-full bg-[#39ff6e] transition-all duration-500"
+                  className="h-full rounded-full bg-[#f58220] transition-all duration-500"
                   style={{ width: `${progress}%` }}
                 />
               </div>
 
-              <span className="font-mono text-[11px] text-[#9898a8]">
+              <span className="font-mono text-[11px] text-[#d8e7f0]">
                 {currentQuestion}/{TOTAL_QUESTIONS}
               </span>
             </div>
@@ -174,43 +174,43 @@ export default function InterviewPage() {
               type="button"
               variant="outline"
               onClick={handleReset}
-              className="border-[#27272f] bg-[#111114] text-[#e8e8f0] hover:border-[#39ff6e55] hover:bg-[#16161a] hover:text-[#39ff6e]"
+              className="border-white/30 bg-transparent text-white hover:border-white hover:bg-white/10 hover:text-white"
             >
               Reset
             </Button>
           </div>
         </header>
 
-        <Card className="mb-5 rounded-xl border-[#1e1e24] bg-[#111114] text-[#e8e8f0] shadow-[0_0_24px_rgba(57,255,110,0.04)]">
+        <Card className="mb-5 rounded-lg border border-[#d7e0e6] bg-white text-[#142536] shadow-sm">
           <CardContent className="flex items-center gap-3 p-4">
-            <div className="h-9 w-1 rounded-full bg-[#39ff6e]" />
+            <div className="h-9 w-1 rounded-full bg-[#f58220]" />
 
             <div>
-              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#6b6b7a]">
-                Target role
+              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#0073b9]">
+                Your conversation
               </p>
 
-              <p className="mt-1 text-sm font-semibold text-[#e8e8f0]">
-                {jobTitle || "Loading interview..."}
+              <p className="mt-1 text-sm font-semibold text-[#29465b]">
+                Personalised insurance guidance with Tina
               </p>
             </div>
           </CardContent>
         </Card>
 
         <div className="mb-4 flex items-center gap-2 sm:hidden">
-          <div className="h-1 flex-1 overflow-hidden rounded-full bg-[#27272f]">
+          <div className="h-1 flex-1 overflow-hidden rounded-full bg-white/20">
             <div
-              className="h-full rounded-full bg-[#39ff6e] transition-all duration-500"
+              className="h-full rounded-full bg-[#f58220] transition-all duration-500"
               style={{ width: `${progress}%` }}
             />
           </div>
 
-          <span className="font-mono text-[10px] text-[#9898a8]">
+          <span className="font-mono text-[10px] text-[#d8e7f0]">
             Q{currentQuestion}/{TOTAL_QUESTIONS}
           </span>
         </div>
 
-        <Card className="flex flex-1 flex-col overflow-hidden rounded-2xl border-[#1e1e24] bg-[#0d0d10] text-[#e8e8f0]">
+        <Card className="flex flex-1 flex-col overflow-hidden rounded-xl border border-[#d7e0e6] bg-white text-[#142536] shadow-[0_14px_40px_rgba(8,47,79,0.08)]">
           <CardContent className="flex flex-1 flex-col p-0">
             <ScrollArea className="h-[440px] flex-1 px-4 py-5 sm:px-6">
               <div className="space-y-6">
@@ -224,27 +224,27 @@ export default function InterviewPage() {
 
                 {loading && (
                   <div className="flex items-start gap-3">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#39ff6e44] bg-[#39ff6e0d]">
-                      <span className="font-mono text-xs font-bold text-[#39ff6e]">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#0073b9]">
+                      <span className="text-xs font-extrabold text-white">
                         AI
                       </span>
                     </div>
 
                     <div>
-                      <p className="mb-2 font-mono text-[11px] text-[#39ff6e]">
-                        Interview Coach is thinking...
+                      <p className="mb-2 text-[11px] font-bold text-[#0073b9]">
+                        Tina is thinking...
                       </p>
 
-                      <div className="flex gap-1.5 rounded-2xl rounded-bl-none border border-[#1e1e24] bg-[#111114] px-4 py-3">
-                        <span className="h-2 w-2 animate-bounce rounded-full bg-[#39ff6e]" />
+                      <div className="flex gap-1.5 rounded-xl rounded-tl-sm border border-[#cddce5] bg-[#f7fafb] px-4 py-3">
+                        <span className="h-2 w-2 animate-bounce rounded-full bg-[#f58220]" />
 
                         <span
-                          className="h-2 w-2 animate-bounce rounded-full bg-[#39ff6e]"
+                          className="h-2 w-2 animate-bounce rounded-full bg-[#f58220]"
                           style={{ animationDelay: "150ms" }}
                         />
 
                         <span
-                          className="h-2 w-2 animate-bounce rounded-full bg-[#39ff6e]"
+                          className="h-2 w-2 animate-bounce rounded-full bg-[#f58220]"
                           style={{ animationDelay: "300ms" }}
                         />
                       </div>
@@ -256,16 +256,16 @@ export default function InterviewPage() {
               </div>
             </ScrollArea>
 
-            <div className="border-t border-[#1a1a20] bg-[#0d0d10] p-4 sm:p-5">
+            <div className="border-t border-[#d7e0e6] bg-[#f7fafb] p-4 sm:p-5">
               {error && (
-                <p className="mb-3 text-sm text-red-400">
+                <p className="mb-3 text-sm font-medium text-red-700">
                   {error}
                 </p>
               )}
 
              {complete ? (
-  <p className="text-center text-sm font-medium text-blue-400">
-    Interview complete — your feedback is above.
+  <p className="text-center text-sm font-semibold text-[#0073b9]">
+    Your insurance recommendation is ready above.
   </p>
 ) : (
   <AnswerForm
@@ -274,8 +274,8 @@ export default function InterviewPage() {
   />
 )}
 
-              <p className="mt-3 text-center font-mono text-[10px] text-[#6b6b7a]">
-                Interview Coach · Practice tailored to your target role
+              <p className="mt-3 text-center text-[10px] font-medium text-[#6b7c88]">
+                Tina · Turners Car Insurance guidance
               </p>
             </div>
           </CardContent>
