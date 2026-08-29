@@ -3,34 +3,33 @@ import {
   interviewerInstruction,
   evaluatorInstruction,
   FIRST_QUESTION,
-  TOTAL_QUESTIONS,
 } from "@/lib/prompts";
 import { askGemini } from "@/lib/gemini";
 import { validateInterviewRequest, countQuestionsAsked } from "@/lib/validators";
 import { cleanReply, buildResponse } from "@/lib/formatters";
 
-describe("interview prompts", () => {
-  it("opens with a fixed first question and a six-question interview", () => {
-    expect(FIRST_QUESTION).toContain("Tell me about yourself");
-    expect(TOTAL_QUESTIONS).toBe(6);
+describe("Tina insurance prompts", () => {
+  it("opens with the required opt-in question", () => {
+    expect(FIRST_QUESTION).toContain("I’m Tina");
+    expect(FIRST_QUESTION).toContain("May I ask you");
   });
 
-  it("builds interviewer instructions for the role and question number", () => {
-    const text = interviewerInstruction("Frontend Developer", 2);
+  it("creates adaptive consultant instructions with the product rules", () => {
+    const text = interviewerInstruction();
 
-    expect(text).toContain("Frontend Developer");
-    expect(text).toContain("question 2 of 6");
-    expect(text).toContain("Ask exactly one question");
-    expect(text).not.toContain("EVALUATOR");
+    expect(text).toContain("Ask exactly one short question");
+    expect(text).toContain("do not follow a hardcoded script");
+    expect(text).toContain("Never recommend MBI for a truck or racing car");
+    expect(text).toContain("10 years old or older");
+    expect(text).toContain("Third Party Car Insurance");
   });
 
-  it("builds evaluator instructions after the interview is over", () => {
-    const text = evaluatorInstruction("Frontend Developer");
+  it("creates a final recommendation instruction", () => {
+    const text = evaluatorInstruction();
 
-    expect(text).toContain("EVALUATOR");
-    expect(text).toContain("Frontend Developer");
-    expect(text).toContain("answered all 6 questions");
-    expect(text).toContain("Do NOT ask another question");
+    expect(text).toContain("RECOMMENDATION EVALUATOR");
+    expect(text).toContain("Do not ask another question");
+    expect(text).toContain("confirm policy wording and eligibility with Turners");
   });
 });
 
@@ -42,7 +41,7 @@ describe("askGemini", () => {
     try {
       await expect(
         askGemini({
-          jobTitle: "Frontend Developer",
+          jobTitle: "Insurance consultation",
           history: [],
           systemInstruction: "test",
         })
@@ -55,15 +54,15 @@ describe("askGemini", () => {
       }
     }
   });
-});   
+});
 
 describe("validateInterviewRequest", () => {
-  it("accepts a job title and history, and maps interviewer to model", () => {
+  it("accepts an insurance conversation and maps Tina to model", () => {
     const result = validateInterviewRequest({
-      jobTitle: "Frontend Developer",
+      jobTitle: "Insurance consultation",
       history: [
-        { role: "interviewer", text: "Tell me about yourself." },
-        { role: "user", text: "I switched into software this year." },
+        { role: "interviewer", text: FIRST_QUESTION },
+        { role: "user", text: "Yes, that is okay." },
       ],
     });
 
@@ -71,20 +70,15 @@ describe("validateInterviewRequest", () => {
     expect(result.value.history[0].role).toBe("model");
   });
 
-  it("rejects empty job titles", () => {
+  it("rejects an empty consultation identifier", () => {
     const result = validateInterviewRequest({ jobTitle: "", history: [] });
 
     expect(result.ok).toBe(false);
-    expect(result.error).toBe(
-      "Please enter a job title before starting the interview."
-    );
   });
 });
 
-
 describe("cleanReply", () => {
   it("removes markdown noise", () => {
-
     expect(cleanReply("**Hello**")).toBe("Hello");
   });
 });
@@ -99,12 +93,12 @@ describe("buildResponse", () => {
 
     expect(result.reply).toBe("Hi");
     expect(result.questionNumber).toBe(2);
-    expect(result.isComplete).toBe(false); // Boolean(0)
+    expect(result.isComplete).toBe(false);
   });
 });
 
 describe("countQuestionsAsked", () => {
-  it("counts only model questions", () => {
+  it("counts only model messages", () => {
     const history = [
       { role: "model", text: "Q1" },
       { role: "user", text: "A1" },
@@ -115,5 +109,3 @@ describe("countQuestionsAsked", () => {
     expect(countQuestionsAsked(history)).toBe(2);
   });
 });
-
-
