@@ -198,14 +198,14 @@ export default function InterviewPage() {
         </Card>
 
         <div className="mb-4 flex items-center gap-2 sm:hidden">
-          <div className="h-1 flex-1 overflow-hidden rounded-full bg-white/20">
+          <div className="h-1 flex-1 overflow-hidden rounded-full bg-[#d7e0e6]">
             <div
               className="h-full rounded-full bg-[#f58220] transition-all duration-500"
               style={{ width: `${progress}%` }}
             />
           </div>
 
-          <span className="font-mono text-[10px] text-[#d8e7f0]">
+          <span className="text-[10px] font-semibold text-[#536675]">
             Q{currentQuestion}/{TOTAL_QUESTIONS}
           </span>
         </div>
@@ -226,7 +226,7 @@ export default function InterviewPage() {
                   <div className="flex items-start gap-3">
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#0073b9]">
                       <span className="text-xs font-extrabold text-white">
-                        AI
+                        T
                       </span>
                     </div>
 
