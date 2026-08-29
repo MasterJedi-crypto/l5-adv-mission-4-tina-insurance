@@ -1,77 +1,108 @@
 /**
- * POST /api/interview   
+ * POST /api/interview
  *
- * this file receives the job title and the conversation. then checks the request is sane and workout what should happen next, ask google and send the answer back.
- * Request   { jobTitle: string, history: [{ role: 'user'|'model', text: string }] }
- * Response  { reply: string, questionNumber: number, isComplete: boolean }
- * Error     { error: string }  with status 400, 429 or 502
+ * Request:
+ * {
+ *   jobTitle: string,
+ *   history: [{ role: "user" | "model", text: string }]
+ * }
+ *
+ * Response:
+ * {
+ *   reply: string,
+ *   state: "question" | "recommendation" | "declined",
+ *   questionNumber: number,
+ *   isComplete: boolean
+ * }
  */
 
-import { askGemini } from '@/lib/gemini'
-import { interviewerInstruction, evaluatorInstruction, FIRST_QUESTION, TOTAL_QUESTIONS } from '@/lib/prompts'
-import { validateInterviewRequest, countQuestionsAsked } from '@/lib/validators'
-import { buildResponse, buildError } from '@/lib/formatters'
+import { askGemini } from "@/lib/gemini";
+import {
+  FIRST_QUESTION,
+  interviewerInstruction,
+} from "@/lib/prompts";
+import {
+  validateInterviewRequest,
+  countQuestionsAsked,
+} from "@/lib/validators";
+import {
+  buildResponse,
+  buildError,
+  parseInsuranceReply,
+  RESPONSE_STATES,
+} from "@/lib/formatters";
 
-// Gemini SDK needs Node
-export const runtime = 'nodejs'
+export const runtime = "nodejs";
 
-// as it takes time, using async to pause the function without freezing the server for the user.
-// the raw text is turned into a javascript object
 export async function POST(request) {
-  let body
+  let body;
+
   try {
-    body = await request.json()
+    body = await request.json();
   } catch {
-    return buildError('Request body must be valid JSON.', 400)
+    return buildError("Request body must be valid JSON.", 400);
   }
 
-  // checking the request (validator.js)
-  const check = validateInterviewRequest(body)
-  if (!check.ok) return buildError(check.error, 400)
+  const check = validateInterviewRequest(body);
 
-  //pulling the values out, destructuring
-  const { jobTitle, history } = check.value
-  const asked = countQuestionsAsked(history)
+  if (!check.ok) {
+    return buildError(check.error, 400);
+  }
 
-  // question 1, zero questions as the interview hasnt started, return firt at prompts.js. 
-  if (asked === 0) {
+  const { jobTitle, history } = check.value;
+  const questionsAsked = countQuestionsAsked(history);
+
+  if (history.length === 0) {
     return Response.json(
-      buildResponse({ reply: FIRST_QUESTION, questionNumber: 1, isComplete: false })
-    )
+      buildResponse({
+        reply: FIRST_QUESTION,
+        state: RESPONSE_STATES.QUESTION,
+        questionNumber: 1,
+      })
+    );
   }
 
-  
-  // Six questions asked and six answered means the interview is over, imported from prompts.js
-  // The model never decides when to stop.
-  const isComplete = asked >= TOTAL_QUESTIONS
-
-  const systemInstruction = isComplete
-    ? evaluatorInstruction(jobTitle, TOTAL_QUESTIONS)
-    : interviewerInstruction(jobTitle, asked + 1, TOTAL_QUESTIONS)
-
-   // calling google and replying wrapping the SDK 
   try {
-    const reply = await askGemini({ jobTitle, history, systemInstruction })
+    const rawReply = await askGemini({
+      jobTitle,
+      history,
+      systemInstruction: interviewerInstruction(),
+    });
+
+    const { reply, state } = parseInsuranceReply(rawReply);
 
     return Response.json(
       buildResponse({
         reply,
-        questionNumber: isComplete ? TOTAL_QUESTIONS : asked + 1,
-        isComplete,
+        state,
+        questionNumber:
+          state === RESPONSE_STATES.QUESTION
+            ? questionsAsked + 1
+            : questionsAsked,
       })
-    )
-  } catch (err) {
-    // Log the real error, show the user something they can act on
-    console.error('[/api/interview]', err)
+    );
+  } catch (error) {
+    console.error("[/api/interview]", error);
 
-    const message = String(err?.message ?? '')
+    const message = String(error?.message ?? "");
 
     if (/api[_ ]?key/i.test(message)) {
-      return buildError('The server is missing its AI credentials. Tell the team.', 500)
+      return buildError(
+        "The server is missing its AI credentials. Tell the team.",
+        500
+      );
     }
+
     if (/quota|rate|429|RESOURCE_EXHAUSTED/i.test(message)) {
-      return buildError('The AI service is busy right now. Wait a moment and try again.', 429)
+      return buildError(
+        "The AI service is busy right now. Wait a moment and try again.",
+        429
+      );
     }
-    return buildError('The AI service did not respond. Please try again.', 502)
+
+    return buildError(
+      "The AI service did not respond. Please try again.",
+      502
+    );
   }
 }
