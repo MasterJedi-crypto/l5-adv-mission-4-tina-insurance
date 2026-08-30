@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-const TOTAL_QUESTIONS = 6;
+
 
 export default function InterviewPage() {
   const router = useRouter();
@@ -29,19 +29,8 @@ export default function InterviewPage() {
   const [complete, setComplete] = useState(false);
   const [error, setError] = useState("");
 
-  const answeredQuestions = messages.filter(
-    (message) => message.role === "user"
-  ).length;
-
-  const currentQuestion = Math.min(
-    answeredQuestions + 1,
-    TOTAL_QUESTIONS
-  );
-
-  const progress = Math.min(
-    Math.round((answeredQuestions / TOTAL_QUESTIONS) * 100),
-    100
-  );
+const [conversationState, setConversationState] =
+  useState("question");
 
   useEffect(() => {
     const savedJobTitle = sessionStorage.getItem(
@@ -113,6 +102,8 @@ export default function InterviewPage() {
       },
     ]);
 
+setConversationState(data.state || "question");
+
     if (data.isComplete) {
       setComplete(true);
     }
@@ -157,18 +148,17 @@ export default function InterviewPage() {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="hidden items-center gap-2 rounded-full bg-white/10 px-3 py-2 sm:flex">
-              <div className="h-1 w-20 overflow-hidden rounded-full bg-white/20">
-                <div
-                  className="h-full rounded-full bg-[#f58220] transition-all duration-500"
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
-
-              <span className="font-mono text-[11px] text-[#d8e7f0]">
-                {currentQuestion}/{TOTAL_QUESTIONS}
-              </span>
-            </div>
+           <div className="hidden rounded-full bg-white/10 px-4 py-2 sm:block">
+  <span className="text-[11px] font-semibold text-[#d8e7f0]">
+    {complete
+      ? conversationState === "declined"
+        ? "Consultation ended"
+        : "Recommendation ready"
+      : loading
+        ? "Tina is thinking..."
+        : "Consultation active"}
+  </span>
+</div>
 
             <Button
               type="button"
@@ -197,18 +187,17 @@ export default function InterviewPage() {
           </CardContent>
         </Card>
 
-        <div className="mb-4 flex items-center gap-2 sm:hidden">
-          <div className="h-1 flex-1 overflow-hidden rounded-full bg-[#d7e0e6]">
-            <div
-              className="h-full rounded-full bg-[#f58220] transition-all duration-500"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-
-          <span className="text-[10px] font-semibold text-[#536675]">
-            Q{currentQuestion}/{TOTAL_QUESTIONS}
-          </span>
-        </div>
+        <div className="mb-4 text-center sm:hidden">
+  <span className="inline-block rounded-full bg-[#e4edf2] px-4 py-2 text-[10px] font-semibold text-[#29465b]">
+    {complete
+      ? conversationState === "declined"
+        ? "Consultation ended"
+        : "Recommendation ready"
+      : loading
+        ? "Tina is thinking..."
+        : "Consultation active"}
+  </span>
+</div>
 
         <Card className="flex flex-1 flex-col overflow-hidden rounded-xl border border-[#d7e0e6] bg-white text-[#142536] shadow-[0_14px_40px_rgba(8,47,79,0.08)]">
           <CardContent className="flex flex-1 flex-col p-0">
@@ -263,9 +252,11 @@ export default function InterviewPage() {
                 </p>
               )}
 
-             {complete ? (
+           {complete ? (
   <p className="text-center text-sm font-semibold text-[#0073b9]">
-    Your insurance recommendation is ready above.
+    {conversationState === "declined"
+      ? "No further information will be collected."
+      : "Your insurance recommendation is ready above."}
   </p>
 ) : (
   <AnswerForm
