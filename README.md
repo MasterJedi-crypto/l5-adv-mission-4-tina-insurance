@@ -1,181 +1,102 @@
-# Interview Coach — Mission Ready (ADV Mission 3)
+# Tina Insurance Assistant — Mission 4
 
-A modern AI-powered interview practice application built with Next.js 15, Tailwind CSS, shadcn/ui, and Gemini.
+**Mission Ready Level 5 Advanced Full Stack Developer**  
+**Student:** Siobhan McKinney  
+**Project:** Turners Car Insurance  
+**Mission:** Mission 4 — Generative AI Insurance Recommendation Application
 
-Designed and developed collaboratively by **Rodrigo**, **Koni**, and **Siobhan** as part of Mission Ready’s Level 5 Advanced Program.
+---
 
 ## Overview
 
-Interview Coach helps users practice job interviews by generating realistic questions, evaluating their answers, and providing actionable feedback.
+Tina Insurance Assistant is a conversational insurance recommendation application created for Turners Car Insurance.
 
-The app adapts based on the user’s job title and responses. This repo is a **team scaffold**: shared setup is done, and each role fills in their own files.
+The application uses Generative AI to guide a user through a short insurance consultation. Tina first asks the user for permission to continue, then generates questions dynamically based on the user's previous answers.
 
-## Team Roles
+Once enough information has been gathered, Tina recommends one or more suitable insurance products and explains the reasons for the recommendation.
 
-### Rodrigo — Release Engineer
+This project was developed individually for Mission Ready Mission 4 and reuses selected architecture and components from the Mission 3 AI Interview Coach application.
 
-- Project setup, folder layout, shadcn install, env, tests, Vercel, CI
-- Own: `config/`, `tests/` setup, `package.json`, `README.md`, GitHub Actions
+---
 
-### Koni — AI & Backend Developer
+## Project Objectives
 
-**Own:** `app/api/interview/route.js`, `lib/gemini.js`, `lib/prompts.js`, `lib/formatters.js`, `lib/validators.js`
+The application was built to demonstrate:
 
-**Leave alone:** `lib/utils.js` (shadcn `cn()` helper, shared)
+- A conversational AI insurance consultation
+- Consent and opt-out handling
+- Adaptive Generative AI questions
+- Conversation history and contextual responses
+- Insurance eligibility business rules
+- Dynamic insurance recommendations
+- Frontend and backend integration
+- Automated testing
+- Docker containerisation
+- Professional Git and Jira workflow
 
-**Already done:** a working Gemini wrapper, interview prompt template, and `POST /api/interview` starter. Expand scoring, JSON formatting, validation, multi-step flow, and conversation memory.
+---
 
-### Siobhan — Frontend UI Developer
+## Insurance Products
 
-**Own:** `app/page.js`, `app/interview/page.js`, `app/results/page.js`, `components/interview/`, `components/results/`, `app/globals.css` (theme), `public/images/`
+Tina can recommend only the following three Turners insurance products:
 
-**Already done:** shadcn primitives in `components/ui/` (button, input, textarea, card, dialog, separator, avatar, scroll-area). Import them; do not recreate them.
+### Mechanical Breakdown Insurance (MBI)
 
-**Start here:** build `/interview` from `QuestionCard` + `AnswerForm`. Call `POST /api/interview` from the client. Never put `GEMINI_API_KEY` in a page.
+Provides insurance guidance relating to mechanical and electrical breakdown protection.
 
-## Tech Stack
+### Comprehensive Car Insurance
 
-- Next.js 15.0.3 (App Router)
-- React 18
-- Tailwind CSS
-- shadcn/ui
-- Gemini SDK (`@google/generative-ai`)
-- Vitest + React Testing Library
-- Vercel
+Provides broader vehicle protection where the vehicle meets the required eligibility conditions.
 
-## Project Structure
+### Third Party Car Insurance
 
-```
-root/
-├── app/
-│   ├── api/interview/route.js     # Koni — POST /api/interview
-│   ├── interview/page.js          # Siobhan — interview UI
-│   ├── results/page.js            # Siobhan — results UI
-│   └── page.js                    # Siobhan — home
-├── components/                    # Siobhan (Frontend UI)
-│   ├── ui/                        # shadcn primitives
-│   ├── interview/                 # QuestionCard, AnswerForm
-│   └── results/                   # ScoreCard, FeedbackBlock
-├── lib/
-│   ├── utils.js                   # shared — shadcn cn() helper
-│   ├── gemini.js                  # Koni — askGemini()
-│   ├── prompts.js                 # Koni — interviewPrompt()
-│   ├── formatters.js              # Koni — expand
-│   └── validators.js              # Koni — expand
-├── public/images/                 # Siobhan — add logo.png
-├── config/                        # Rodrigo
-│   ├── env.example
-│   ├── vercel.json
-│   └── deployment.md
-├── tests/
-│   ├── setup.js
-│   ├── api.test.js
-│   ├── ui.test.js
-│   ├── lib.test.js
-│   └── integration/
-│       └── interview-flow.test.js
-├── .github/workflows/tests.yml    # Rodrigo — CI
-├── .env.local                     # gitignored Gemini key
-├── vitest.config.mjs
-├── next.config.mjs
-├── package.json
-└── README.md
-```
+Provides guidance for users primarily requiring protection for damage they may cause to another person's vehicle or property.
 
-## How to run locally
+Tina does not invent prices, discounts, excess amounts, policy benefits, exclusions or guarantees.
 
-1. Clone the repo and install from the **repo root** (not inside `app/`):
+---
 
-```bash
-npm install
-```
+## Mandatory Business Rules
 
-2. Copy `config/env.example` to `.env.local` and add your key:
+The application enforces two important Mission 4 eligibility rules.
 
-```
-GEMINI_API_KEY=your_key_here
-```
+### Mechanical Breakdown Insurance
 
-3. Start the dev server:
+Mechanical Breakdown Insurance must **not** be recommended for:
 
-```bash
-npm run dev
-```
+- Trucks
+- Racing cars
 
-4. Open [http://localhost:3000](http://localhost:3000).
+### Comprehensive Car Insurance
 
-Never commit `.env.local` or use the key in client components.
+Comprehensive Car Insurance must **not** be recommended for a vehicle that is:
 
-## How to test
+- 10 years old or older
 
-```bash
-npm test          # single run (also used in CI)
-npm run test:watch
-npm run verify    # tests + lint + production build
-```
+These restrictions override other recommendation criteria.
 
-Placeholder tests live in `tests/`. Konei can extend `api.test.js` and `lib.test.js`; Siobhan can extend `ui.test.js`. The integration file `tests/integration/interview-flow.test.js` is for the full loop later: typing, submit, and AI response.
+---
 
-## API Route
+## Consent-First Conversation
 
-```
-POST /api/interview
-```
+Tina begins every new consultation with an opt-in question:
 
-Starter body:
+> I'm Tina. I help you choose the right insurance policy. May I ask you a few personal questions to make sure I recommend the best policy for you?
 
-```json
-{
-  "question": "Tell me about yourself.",
-  "answer": "I switched into software this year."
-}
-```
+If the user agrees, Tina continues with the consultation.
 
-Starter response:
+If the user refuses or withdraws consent:
 
-```json
-{
-  "result": "..."
-}
-```
+- Tina stops asking questions
+- No additional personal information is collected
+- No insurance recommendation is displayed
+- The consultation is marked as ended
 
-Konei can change this shape (for example `question`, `feedback`, `questionNumber`).
+Example:
 
-## How to deploy
+```text
+User:
+No thanks
 
-See `config/deployment.md`. Short version:
-
-1. Push to GitHub.
-2. Import the repo in [Vercel](https://vercel.com). Leave Root Directory blank.
-3. Add `GEMINI_API_KEY` in Vercel → Project Settings → Environment Variables.
-4. Deploy. Confirm the key never appears in browser network responses.
-
-`config/vercel.json` is the team copy of deploy settings. Vercel only reads `vercel.json` from the **project root**, so copy it there if you add routes or headers.
-
-## How to contribute
-
-1. Work only in the files for your role (see Team Roles).
-2. Create a branch from `main`: `feature/your-name-short-description`.
-3. Keep commits focused. Do not commit `.env.local` or API keys.
-4. Run `npm run verify` before opening a pull request.
-5. Open a PR and ask the other two roles to review if you touch a shared file (`package.json`, `app/globals.css`, `lib/utils.js`).
-
-## Design System
-
-Dark theme with thin green accents (Siobhan):
-
-| Token      | Hex       |
-| ---------- | --------- |
-| Background | `#0D0D0D` |
-| Surface    | `#1A1A1A` |
-| Accent     | `#00FF88` |
-| Text       | `#E5E5E5` |
-| Borders    | `#00C46B` |
-
-shadcn/ui: Button, Input, Textarea, Card, Dialog, Separator, Scroll Area, Avatar.
-
-## Contributors
-
-- **Rodrigo** ([RodrigoNunes2004](https://github.com/RodrigoNunes2004)) — Release Engineer
-- **Konei** ([Koni-BEI](https://github.com/Koni-BEI)) — AI & Backend Developer
-- **Siobhan** ([MasterJedi-crypto](https://github.com/MasterJedi-crypto)) — Frontend UI Developer
+Tina:
+No problem. I will not collect any further information.
