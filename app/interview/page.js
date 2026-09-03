@@ -97,7 +97,10 @@ const [conversationState, setConversationState] =
     setMessages((current) => [
       ...current,
       {
-        role: data.isComplete ? "feedback" : "interviewer",
+        role:
+  data.state === "recommendation"
+    ? "feedback"
+    : "interviewer",
         text: data.reply,
       },
     ]);
